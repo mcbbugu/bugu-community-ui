@@ -5,6 +5,13 @@ export default {
   /*
   ** Headers of the page
   */
+  // axios: {
+  //   // can not use 
+  //   // baseURL: process.env.apiUrl
+  //   // can use
+  //   baseURL: 'http://192.168.0.102:8081'
+  // },
+
   head: {
     titleTemplate: '%s - ' + process.env.npm_package_name,
     title: process.env.npm_package_name || '',
@@ -43,6 +50,11 @@ export default {
   modules: [
     // '@nuxtjs/proxy'
   ],
+
+  // server: {
+  //   port: 3000, // default: 3000
+  //   host: '0.0.0.0', // default: localhost
+  // },
 
   // proxyTable: {
   //   '/api': {
