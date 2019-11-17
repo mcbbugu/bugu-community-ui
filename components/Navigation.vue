@@ -19,125 +19,50 @@
       <v-btn style="color:#777777;" text to="/inspire">友链</v-btn>
     </v-toolbar-items>
 
-    <!-- <template v-if="$vuetify.breakpoint.smAndUp">
-        <v-btn icon>
-          <v-icon to="">mdi-account-circle</v-icon>
-        </v-btn>
-        <v-btn icon>
-          <v-icon>mdi-delete-circle</v-icon>
-        </v-btn>
-        <v-btn icon>
-          <v-icon>mdi-plus-circle</v-icon>
-        </v-btn>
-    </template>-->
-
-    <v-row justify="center">
-      <v-dialog v-model="dialog" max-width="400">
+    <div class="text-center">
+      <v-dialog v-model="dialog" width="400">
         <template v-slot:activator="{ on }">
-          <div class="my-2" style="padding-bottom:2px;">
-            <!-- 获取用户头像时加载loading -->
-            <v-btn color="#ccc" x-small light outlined fab v-on="on">
-              <v-icon>mdi-account-circle</v-icon>
-            </v-btn>
-          </div>
+          <v-btn class="ma-2" color="#777777" text icon v-on="on">
+            <v-icon>mdi-account</v-icon>
+          </v-btn>
         </template>
+
         <v-card>
-          <v-card-title class="headline">请登录</v-card-title>
-          <v-card-text>
-            <!-- 登录弹窗 -->
-            <v-form ref="form" v-model="valid" lazy-validation>
-              <v-text-field v-model="name" :counter="10" :rules="nameRules" label="Name" required></v-text-field>
+          <v-card-title class="headline grey lighten-2" primary-title>第三方登录</v-card-title>
 
-              <v-text-field v-model="email" :rules="emailRules" label="E-mail" required></v-text-field>
+          <v-card-text></v-card-text>
 
-              <!-- <v-btn :disabled="!valid" color="success" class="mr-4" @click="validate">Validate</v-btn>
-
-              <v-btn color="error" class="mr-4" @click="reset">Reset Form</v-btn>
-
-              -->
-
-              <div class="text-center" style="padding-right:20px;">
-                <div class="left">
-                  <v-btn
-                    class="ma-2"
-                    :loading="loading"
-                    :disabled="loading"
-                    color="success"
-                    @click="loader = 'loading'"
-                    style="width:400px;"
-                  >提交</v-btn>
-                </div>
-              </div>
-
-              <v-spacer></v-spacer>
-
-              <div class="text-center" style="padding-right:20px;">
-                <v-btn class="ma-2" outlined color="#888" style="width:400px;">GitHub 登录</v-btn>
-              </div>
-              <div class="text-center" style="padding-right:20px;">
-                <v-btn class="ma-2" outlined color="#888" style="width:400px;">码云登录</v-btn>
-              </div>
-            </v-form>
-          </v-card-text>
+          <div class="text-center">
+            <v-btn class="ma-2" outlined color="#007bff" style="width:300px;">GitHub 登录</v-btn>
+          </div>
+          <div class="text-center">
+            <v-btn class="ma-2" outlined color="#007bff" style="width:300px;" @click="login">码云登录</v-btn>
+          </div>
+          <v-divider></v-divider>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="green darken-1" text @click="dialog = false"></v-btn>
-            <v-btn color="green darken-1" text @click="dialog = false">注册</v-btn>
+            <!-- <v-btn color="primary" text @click="dialog = false">I accept</v-btn> -->
           </v-card-actions>
         </v-card>
       </v-dialog>
-    </v-row>
-
-    <!-- <v-col cols="12" sm="6" md="2">
-        <v-text-field append-icon="mdi-magnify" class="mx-4" rounded flat hide-details color="#007bff">
-        </v-text-field>
-    </v-col>-->
+    </div>
   </v-app-bar>
 </template>
 
 <script>
+import axios from "axios";
+import qs from 'qs';
 export default {
   data: () => ({
     dialog: false,
     valid: true,
-    name: "",
-    nameRules: [
-      v => !!v || "Name is required",
-      v => (v && v.length <= 10) || "Name must be less than 10 characters"
-    ],
-    email: "",
-    emailRules: [
-      v => !!v || "E-mail is required",
-      v => /.+@.+\..+/.test(v) || "E-mail must be valid"
-    ],
-    select: null,
-
-    loader: null,
-    loading: false
   }),
 
-  watch: {
-    loader() {
-      const l = this.loader;
-      this[l] = !this[l];
-
-      setTimeout(() => (this[l] = false), 3000);
-
-      this.loader = null;
-    }
-  },
-
   methods: {
-    validate() {
-      if (this.$refs.form.validate()) {
-        this.snackbar = true;
-      }
-    },
-    reset() {
-      this.$refs.form.reset();
-    },
-    resetValidation() {
-      this.$refs.form.resetValidation();
+    login() {
+      console.log("进入了登录方法");
+      window.location.href = "http://127.0.0.1:8081/oauth/login/gitee"
+      // window.location.href = "http://192.168.0.102:3000"
     }
   }
 };

@@ -41,7 +41,18 @@ export default {
   ** Nuxt.js modules
   */
   modules: [
+    // '@nuxtjs/proxy'
   ],
+
+  // proxyTable: {
+  //   '/api': {
+  //     target: "http://gitee.com/login",
+  //     changeOrigin: true,
+  //     pathRewrite: {
+  //       '^/api': ''
+  //     }
+  //   }
+  // },
   /*
   ** vuetify module configuration
   ** https://github.com/nuxt-community/vuetify-module
@@ -70,7 +81,7 @@ export default {
     /*
     ** You can extend webpack config here
     */
-    extend (config, ctx) {
+    extend(config, ctx) {
     }
   }
 }
