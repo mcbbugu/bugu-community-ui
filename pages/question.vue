@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-content>
-      <v-container class="grey lighten-5">
+      <v-container class="lighten-5" style="background:#fff;">
         <v-row no-gutters style="flex-wrap: nowrap;">
           <v-col
             cols="5"
@@ -17,9 +17,9 @@
         </v-row>
       </v-container>
     </v-content>
-    <v-footer :fixed="fixed" app light>
+    <!-- <v-footer :fixed="fixed" app light>
       <span>&copy; 2019</span>
-    </v-footer>
+    </v-footer> -->
   </div>
 </template>
 <script>
