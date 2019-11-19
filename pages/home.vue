@@ -23,7 +23,7 @@
   </div>
 </template>
 <script>
-import list from "~/components/question/List.vue";
+import list from "~/components/home/List.vue";
 export default {
   components: {
     list
