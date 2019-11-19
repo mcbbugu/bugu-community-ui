@@ -14,7 +14,7 @@
     <v-spacer></v-spacer>
 
     <v-toolbar-items>
-      <v-btn style="color:#777777;" text to="/question">社区</v-btn>
+      <v-btn style="color:#777777;" text to="/home">社区</v-btn>
       <v-btn style="color:#777777;" text to="/a">文档</v-btn>
       <v-btn style="color:#777777;" text to="/b">招聘</v-btn>
       <v-btn style="color:#777777;" text to="/">博客</v-btn>
