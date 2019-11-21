@@ -93,24 +93,24 @@ export default {
       { title: "评论最多" },
       { title: "浏览最多" }
     ],
-    sort: "",
+    sort: "gmt_create",
     sortName: "排序方式"
   }),
 
   mounted() {
     axios
       .get("/question/find", {
-        params: { current: this.page, size: this.size, sort: "gmt_create" }
+        params: { current: this.page, size: this.size, sort: this.sort}
       })
       .then(res => {
         this.items = res.data.data.records;
         this.pageCount = res.data.data.pages;
         this.page = res.data.data.current;
-        console.log(this.items);
       });
   },
 
   methods: {
+    //分类
     getTag(tag) {
       console.log(tag);
       this.tag = tag;
@@ -127,11 +127,10 @@ export default {
         .then(res => {
           this.items = res.data.data.records;
           this.pageCount = res.data.data.pages;
-          console.log(this.items);
         });
     },
 
-    //分页事件
+    //分页
     next(e) {
       this.page = e;
       axios
@@ -146,7 +145,6 @@ export default {
         .then(res => {
           this.items = res.data.data.records;
           this.pageCount = res.data.data.pages;
-          console.log(this.items);
         });
     },
 
@@ -179,58 +177,13 @@ export default {
         .then(res => {
           this.items = res.data.data.records;
           this.pageCount = res.data.data.pages;
-          console.log(this.items);
         });
-      console.log(index);
       this.sortName = index;
     }
   },
 
-  filters: {
-    //时间戳显示格式为几天前、几分钟前、几秒前
-    getTimeFormat(valueTime) {
-      if (valueTime) {
-        // let newData = Date.parse(new Date() + '')
-        // let diffTime = Math.abs(newData - valueTime)
-        let diffTime = Math.abs(
-          new Date().getTime() - new Date(valueTime).getTime()
-        );
-        if (diffTime > 7 * 24 * 3600 * 1000) {
-          let date = new Date(valueTime);
-          // let y = date.getFullYear()
-          let m = date.getMonth() + 1;
-          m = m < 10 ? "0" + m : m;
-          let d = date.getDate();
-          d = d < 10 ? "0" + d : d;
-          let h = date.getHours();
-          h = h < 10 ? "0" + h : h;
-          let minute = date.getMinutes();
-          let second = date.getSeconds();
-          console.log(second);
-          minute = minute < 10 ? "1" + minute : minute;
-          second = second < 10 ? "0" + second : second;
-          return m + "-" + d + " " + h + ":" + minute;
-        } else if (
-          diffTime < 7 * 24 * 3600 * 1000 &&
-          diffTime > 24 * 3600 * 1000
-        ) {
-          // //注释("一周之内");
-          // var time = newData - diffTime;
-          let dayNum = Math.floor(diffTime / (24 * 60 * 60 * 1000));
-          return dayNum + "天前";
-        } else if (diffTime < 24 * 3600 * 1000 && diffTime > 3600 * 1000) {
-          // //注释("一天之内");
-          // var time = newData - diffTime;
-          let dayNum = Math.floor(diffTime / (60 * 60 * 1000));
-          return dayNum + "小时前";
-        } else if (diffTime < 3600 * 1000 && diffTime > 0) {
-          // //注释("一小时之内");
-          // var time = newData - diffTime;
-          let dayNum = Math.floor(diffTime / (60 * 1000));
-          return dayNum + "分钟前";
-        }
-      }
-    }
+  find(){
+
   }
 };
 </script>
