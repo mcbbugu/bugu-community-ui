@@ -15,13 +15,14 @@
             clearable
             dense
           ></v-text-field>
-          <v-select style="margin:0 auto; width:90%;"
+          <!-- dense 变小 -->
+          <v-select style="margin:0 auto; width:90%; z-index: 10000"
             v-model="value"
             :items="items"
-            chips
             label="标签"
             multiple
             outlined
+            small-chips
             dense
             deletable-chips
           ></v-select>
@@ -32,21 +33,26 @@
           label="请使用markdown编写"
           value=""
         ></v-textarea> -->
-        <editor/>
-        <v-btn style="margin: 30px 0 10px 41px" depressed color="primary"><v-icon>mdi-cloud-upload</v-icon>&nbsp;发布</v-btn>
+        <!-- <QuillEditor/> -->
+        <MavonEditor/>
+        <v-btn style="margin: 30px 0 10px 43px" depressed color="primary"><v-icon>mdi-cloud-upload</v-icon>&nbsp;立即发布</v-btn>
+        <v-btn style="margin: 30px 0 10px 0" depressed>存为草稿</v-btn>
         </v-card>
       </v-col>
       <v-col cols="6" md="2">
-        <v-card class="pa-2" outlined>.col-6 .col-md-4</v-card>
+        <v-card class="pa-2" outlined>
+          <a target="_blank" href="https://github.com/ryanhanwu/How-To-Ask-Questions-The-Smart-Way/blob/master/README-zh_CN.md">提问的智慧</a></v-card>
       </v-col>
     </v-row>
   </v-container>
 </template>
 <script>
-import editor from '~/components/common/QuillEditor.vue'
+import QuillEditor from '~/components/common/QuillEditor.vue'
+import MavonEditor from '~/components/common/MavonEditor.vue'
 export default {
     components: {
-        editor
+        QuillEditor,
+        MavonEditor
     },
     data: () => ({
       items: ['foo', 'bar', 'fizz', 'buzz'],

@@ -20,7 +20,7 @@
                 <v-icon>mdi-pencil</v-icon>
             </v-btn>-->
             <v-btn
-              style="color:#777777; border:none; background:#fff; margin:7px 5px 0 0;"
+              style="color:#777777; border:none; background:#fff; margin:7.5px 0 0 0;"
               tile
               outlined
               color="#777777"
