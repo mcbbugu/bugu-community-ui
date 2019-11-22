@@ -43,6 +43,7 @@ export default {
   plugins: [
     '~plugins/filters.js',
     { src: "~plugins/vue-quill-editor.js", ssr: false },
+    { src: '@/plugins/vue-mavon-editor', srr: false }
   ],
   /*
   ** Nuxt.js dev-modules

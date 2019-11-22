@@ -14,7 +14,7 @@
             <v-menu open-on-hover offset-y>
               <template v-slot:activator="{ on }">
                 <v-btn-toggle tile color="#777777" group>
-                  <v-icon size="15">mdi-arrow-right</v-icon>
+                  <v-icon size="15">mdi-format-list-bulleted-square</v-icon>
                   <v-btn max-height="26" style="padding: 0 1px;" v-on="on">{{sortName}}</v-btn>
                 </v-btn-toggle>
               </template>
