@@ -20,13 +20,14 @@
                 <v-icon>mdi-pencil</v-icon>
             </v-btn>-->
             <v-btn
-              style="color:#777777; border:none; background:#fff; margin:7.5px 0 0 0;"
+              style="color:#777777; border:none; margin:7.5px 0 0 0;"
               tile
               outlined
               color="#777777"
               v-on="on"
             >
-              <v-icon left>mdi-pencil</v-icon>发布
+              <v-icon left>mdi-pen-plus</v-icon>
+              <v-icon left>mdi-menu-down</v-icon>
             </v-btn>
           </template>
           <v-list>
@@ -106,9 +107,9 @@ export default {
     snackbar: false,
     text: "登录成功！",
     dropDownList: [
-      { title: "博客" },
-      { title: "提问" },
-      { title: "分享" }
+      { title: "写篇博客" },
+      { title: "提个问题" },
+      { title: "分享热爱" }
     ]
   }),
 
@@ -152,7 +153,7 @@ export default {
     },
     dropDown(e){
       if(e == "提问"){
-        this.$router.push("/question");
+        this.$router.push("/question/edit");
       }
     }
   }
