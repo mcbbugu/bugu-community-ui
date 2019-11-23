@@ -51,7 +51,6 @@ export default {
 
 <style scoped>
 .mavonEditor {
-  z-index: 1000;
   margin: 0 auto;
   width: 90%;
   height: 100%;

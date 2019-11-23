@@ -7,7 +7,7 @@
     style="border-top:4px solid #1976d2; color:#888888"
   >
     <v-app-bar-nav-icon>
-      <v-icon color="#1976d2" to="/home">mdi-tennis</v-icon>
+      <v-icon color="#1976d2" to="/home">mdi-hubspot</v-icon>
     </v-app-bar-nav-icon>
     <v-toolbar-title style="font-size:1em; color:#777777">布谷社区</v-toolbar-title>
     <v-spacer></v-spacer>
@@ -26,7 +26,7 @@
               color="#777777"
               v-on="on"
             >
-              <v-icon left>mdi-pen-plus</v-icon>
+              <v-icon left>mdi-circle-edit-outline</v-icon>
               <v-icon left>mdi-menu-down</v-icon>
             </v-btn>
           </template>
@@ -36,7 +36,8 @@
               :key="index"
               @click="dropDown(item.title)"
             >
-              <v-list-item-title style="font-size:0.8em; color:#777777;">{{item.title}}</v-list-item-title>
+              <v-list-item-title style="font-size:0.8em; color:#777777;">
+                <v-icon style="padding-bottom:2px;" size="17" v-text="item.icon"></v-icon> {{item.title}}</v-list-item-title>
             </v-list-item>
           </v-list>
         </v-menu>
@@ -85,7 +86,6 @@
 
     <!-- 消息条 -->
     <div>
-      <!-- <v-btn dark>Open Snackbar</v-btn> -->
       <v-snackbar v-model="snackbar" :timeout="1500" color="#4CAF50" top>
         {{ text }}
         <v-btn color="#fff" text @click="snackbar = false">关闭</v-btn>
@@ -107,9 +107,9 @@ export default {
     snackbar: false,
     text: "登录成功！",
     dropDownList: [
-      { title: "写篇博客" },
-      { title: "提个问题" },
-      { title: "分享热爱" }
+      { title: "写篇博客", icon: "mdi-circle-edit-outline"},
+      { title: "提个问题", icon: "mdi-comment-question-outline"},
+      { title: "学习笔记", icon: "mdi-note-outline"}
     ]
   }),
 
@@ -152,7 +152,7 @@ export default {
       // window.location.href = "http://192.168.0.102:3000"
     },
     dropDown(e){
-      if(e == "提问"){
+      if(e == "提个问题"){
         this.$router.push("/question/edit");
       }
     }

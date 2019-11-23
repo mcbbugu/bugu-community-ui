@@ -51,9 +51,11 @@
             <v-list-item-title style="color:#636b6f" v-text="item.title"></v-list-item-title>
           </v-list-item-content>
           <v-list-item-icon style="color:#bab9bb; padding-top:10px; font-size:12px;">
-            <v-icon size="15" color="#bab9bb">mdi-thumb-up</v-icon>
+            <v-icon size="15" color="#bab9bb">mdi-eye-outline</v-icon>
+            &nbsp;{{item.viewCount}} &nbsp;&nbsp;
+            <v-icon size="15" color="#bab9bb">mdi-thumb-up-outline</v-icon>
             &nbsp;{{item.agreeCount}} &nbsp;&nbsp;
-            <v-icon size="15" color="#bab9bb">mdi-message-text</v-icon>
+            <v-icon size="15" color="#bab9bb">mdi-comment-outline</v-icon>
             &nbsp;{{item.commentCount}}&nbsp;&nbsp; / {{item.gmtCreate | getTimeFormat}}
             <i
               class="fa fa-comment-o"
