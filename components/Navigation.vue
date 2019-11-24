@@ -4,7 +4,7 @@
     hide-on-scroll
     fixed
     height="50"
-    style="border-top:4px solid #1976d2; color:#888888"
+    style="border-top:4px solid #1976d2; color:#888888;"
   >
     <v-app-bar-nav-icon>
       <v-icon color="#1976d2" to="/home">mdi-hubspot</v-icon>
@@ -37,7 +37,7 @@
               @click="dropDown(item.title)"
             >
               <v-list-item-title style="font-size:0.8em; color:#777777;">
-                <v-icon style="padding-bottom:2px;" size="17" v-text="item.icon"></v-icon> {{item.title}}</v-list-item-title>
+                <v-icon style="padding-bottom:3.8px;" size="17" v-text="item.icon"></v-icon> {{item.title}}</v-list-item-title>
             </v-list-item>
           </v-list>
         </v-menu>
@@ -140,7 +140,6 @@ export default {
       axios.get("/user/refresh").then(res => {
         this.user = res.data.data;
         this.isLogin = true;
-        console.log(res);
       });
     }
   },
@@ -152,8 +151,10 @@ export default {
       // window.location.href = "http://192.168.0.102:3000"
     },
     dropDown(e){
-      if(e == "提个问题"){
-        this.$router.push("/question/edit");
+      if(e == "写篇博客"){
+        this.$router.push("/article/blog");
+      }else if(e == "提个问题"){
+        this.$router.push("/article/question");
       }
     }
   }

@@ -4,7 +4,8 @@
     <v-row justify="end">
       <v-col cols="12" sm="6" md="9">
         <v-card class="pa-2" outlined>
-          <h3 style="text-align:center; margin:40px; font-size:1.2em; color:#636b6f;">编辑问题</h3>
+          <h3 style="text-align:center; margin:40px; font-size:1.2em; color:#636b6f;">
+            编辑问题</h3>
           <v-text-field
             @input="titleEdit"
             style="margin:0 auto; width:90%;"
@@ -18,16 +19,16 @@
           ></v-text-field>
           <!-- dense 变小 deletable-chips -->
           <v-select
-            @click="bugu"
-            @focus="openSelect"
+            v-bind:class="{up: isActive}"
+            @focus="select_focus"
             @change="select"
+            @blur="select_blur"
             style="margin:10px auto; width:90%;"
             :rules="tagRules"
             :counter="3"
             v-model="value"
             :items="items"
             label="标签"
-            :menu-props="{top: true,}"
             outlined
             multiple
             small-chips
@@ -37,23 +38,17 @@
           <MavonEditor v-on:change_mavon="change_text" />
           <!-- 消息条 -->
           <div>
-            <v-snackbar v-model="snackbar" :timeout="1500" color="#ff5252" top>
+            <v-snackbar style="z-index:10000" v-model="snackbar" :timeout="1500" color="#ff5252" top>
               {{text}}
               <v-btn color="#fff" text @click="snackbar=false">
-                <v-icon>mdi-window-close</v-icon>
+                <v-icon size="18">mdi-window-close</v-icon>
               </v-btn>
             </v-snackbar>
           </div>
           <!-- 底部按钮 -->
           <v-card outlined style="margin:20px auto; padding: 20px 10px; width:90%;">
-            <v-btn @click="release" outlined depressed color="success">
+            <v-btn @click="release" depressed color="primary">
               <v-icon>mdi-telegram</v-icon>&nbsp;立即发布
-            </v-btn>
-            <v-btn outlined color="primary" depressed>
-              <v-icon>mdi-sigma-lower</v-icon>存为草稿
-            </v-btn>
-            <v-btn text color="#636b6f" style="left:370px;" depressed>
-              <v-icon>mdi-emoticon-excited-outline</v-icon>使用说明
             </v-btn>
           </v-card>
           <!-- 底部按钮 end -->
@@ -94,7 +89,9 @@ export default {
       v => v.length <= 3 || "不能超过3个标签"
     ],
     text: "",
-    snackbar: false
+    snackbar: false,
+    isActive: false,
+    classify: ""
   }),
 
   mounted() {
@@ -114,13 +111,17 @@ export default {
 
     titleEdit(e) {
       this.title = e;
-      console.log(e);
     },
 
     select(e) {
       this.tags = e;
     },
-    openSelect() {},
+    select_focus() {
+      this.isActive = true
+    },
+    select_blur(){
+      this.isActive = false
+    },
     //发布
     release() {
       if (this.content.length == 0) {
@@ -135,28 +136,33 @@ export default {
         this.snackbar = true;
         this.text = "请选择标签";
       }
-
       let data = {
         title: this.title,
         tags: this.value,
-        content: this.content
+        content: this.content,
+        classify: "问答"
       };
       // if(this.title.length > 0 && this.title.length < 30 &&
       // this.value > 0 &&)
       data = qs.stringify(data);
       axios
-        .post("/question/add", data, {
+        .post("/article/add", data, {
           headers: {
             "Content-Type": "application/x-www-form-urlencoded"
           }
         })
         .then(res => {
-          console.log(res);
+          if(res.data.code == 1){
+            this.$router.push("/article/" + res.data.data);
+          }
         });
-    },
-    bugu() {
-      console.log();
     }
   }
 };
 </script>
+<style lang="scss" scoped>
+  //标签选择界面浮于最上方
+  .up{
+    z-index: 11;
+  }
+</style>

@@ -1,17 +1,22 @@
 <template>
   <div class="mavonEditor">
     <no-ssr>
-      <mavon-editor 
-      :toolbars="markdownOption"
-       placeholder="Markdown 编写"
-       :tabSize=4
-       @change="change_mavon"
-       :transition=true
-       v-model="handbook"/>
+      <mavon-editor style="z-index:10"
+        ref=md
+        :toolbars="markdownOption"
+        placeholder="Markdown 编写"
+        :tabSize="4"
+        @change="change_mavon"
+        :transition="true"
+        v-model="handbook"
+        @imgAdd="$imgAdd"
+        :boxShadow=false
+      />
     </no-ssr>
   </div>
 </template>
 <script>
+import axios from 'axios'
 export default {
   data() {
     return {
@@ -35,16 +40,34 @@ export default {
         alignleft: true, // 左对齐
         aligncenter: true, // 居中
         alignright: true, // 右对齐
-        subfield: true, // 单双栏模式
-        preview: true, // 预览
+        preview: true // 预览
       },
       handbook: ""
     };
   },
   methods: {
-    change_mavon(value,render){
-      this.$emit('change_mavon', value, render);
+    change_mavon(value, render) {
+      this.$emit("change_mavon", value, render);
     },
+
+    // 绑定@imgAdd event
+    $imgAdd(pos, $file) {
+      // 第一步.将图片上传到服务器.
+      console.log("进入图片上传方法")
+      var formdata = new FormData();
+      formdata.append("img", $file);
+      axios({
+        url: "http://192.168.0.102:8081/question/img/upload",
+        method: "post",
+        data: formdata,
+        headers: { "Content-Type": "multipart/form-data" }
+      }).then(res => {
+        // 第二步.将返回的url替换到文本原位置![...](0) -> ![...](url)
+        // $vm.$img2Url 详情见本页末尾
+        console.log(res);
+        this.$refs.md.$img2Url(pos, res.data.data);
+      });
+    }
   }
 };
 </script>

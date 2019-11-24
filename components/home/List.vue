@@ -4,19 +4,20 @@
       <v-col cols="12" sm="6" class="py-1">
         <!-- v-model="text" -->
         <v-btn-toggle tile color="#777777" group>
-          <v-btn max-height="26" @click="getTag('')">全部</v-btn>
-          <v-btn max-height="26" @click="getTag('问答')">问答</v-btn>
-          <v-btn max-height="26" @click="getTag('博客')">博客</v-btn>
-          <v-btn max-height="26" @click="getTag('健身')">健身</v-btn>
-          <v-btn max-height="26" @click="getTag('内在工程')">内在工程</v-btn>
+          <v-btn max-height="26" @click="getClassify('')">全部</v-btn>
+          <v-btn max-height="26" @click="getClassify('问答')">问答</v-btn>
+          <v-btn max-height="26" @click="getClassify('博客')">博客</v-btn>
+          <v-btn max-height="26" @click="getClassify('健身')">健身</v-btn>
+          <v-btn max-height="26" @click="getClassify('内在工程')">内在工程</v-btn>
           <!-- 下拉排序列表 -->
           <div style="margin-left:400px;">
             <v-menu open-on-hover offset-y>
               <template v-slot:activator="{ on }">
                 <v-btn-toggle tile color="#777777" group>
-                  
                   <v-btn max-height="26" style="padding: 0 1px;" v-on="on">
-                    <v-icon size="15">mdi-format-list-bulleted-square</v-icon>&nbsp;{{sortName}}</v-btn>
+                    <v-icon size="15">mdi-format-list-bulleted-square</v-icon>
+                    &nbsp;{{sortName}}
+                  </v-btn>
                 </v-btn-toggle>
               </template>
               <v-list>
@@ -41,12 +42,11 @@
           style="border-top:1px solid #f2f2f2; height:70px;"
           v-for="item in items"
           :key="item.title"
-          @click
-        >
+          @click="openArticle(item.id)">
           <v-list-item-avatar>
             <v-img :src="item.avatarUrl"></v-img>
           </v-list-item-avatar>
-          <v-chip label small style="margin-right:10  px; right:13px;">{{item.tag}}</v-chip>
+          <v-chip label small style="margin-right:10  px; right:13px;">{{item.classify}}</v-chip>
           <v-list-item-content>
             <v-list-item-title style="color:#636b6f" v-text="item.title"></v-list-item-title>
           </v-list-item-content>
@@ -89,7 +89,7 @@ export default {
     tagColor: "",
     page: 1,
     pageCount: 0,
-    size: 5,
+    size: 10,
     dropDownList: [
       { title: "最新发布" },
       { title: "点赞最多" },
@@ -97,13 +97,14 @@ export default {
       { title: "浏览最多" }
     ],
     sort: "gmt_create",
-    sortName: "排序方式"
+    sortName: "排序方式",
+    classify: ""
   }),
 
   mounted() {
     axios
-      .get("/question/find", {
-        params: { current: this.page, size: this.size, sort: this.sort}
+      .get("/article/find", {
+        params: { current: this.page, size: this.size, sort: this.sort }
       })
       .then(res => {
         this.items = res.data.data.records;
@@ -114,16 +115,15 @@ export default {
 
   methods: {
     //分类
-    getTag(tag) {
-      console.log(tag);
-      this.tag = tag;
+    getClassify(classify) {
+      this.classify = classify;
       this.page = 1;
       axios
-        .get("/question/find", {
+        .get("/article/find", {
           params: {
             current: this.page,
             size: this.size,
-            tag: this.tag,
+            classify: this.classify,
             sort: this.sort
           }
         })
@@ -137,11 +137,11 @@ export default {
     next(e) {
       this.page = e;
       axios
-        .get("/question/find", {
+        .get("/article/find", {
           params: {
             current: this.page,
             size: this.size,
-            tag: this.tag,
+            classify: this.classify,
             sort: this.sort
           }
         })
@@ -169,11 +169,11 @@ export default {
           break;
       }
       axios
-        .get("/question/find", {
+        .get("/article/find", {
           params: {
             current: this.page,
             size: this.size,
-            tag: this.tag,
+            classify: this.classify,
             sort: this.sort
           }
         })
@@ -182,11 +182,11 @@ export default {
           this.pageCount = res.data.data.pages;
         });
       this.sortName = index;
+    },
+
+    openArticle(e){
+      this.$router.push("/article/" + e);
     }
-  },
-
-  find(){
-
   }
 };
 </script>
