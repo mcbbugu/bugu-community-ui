@@ -1,25 +1,34 @@
 <template>
   <v-card max-width="344" class="mx-auto">
-    <v-list-item>
-      <v-list-item-content>
-        <v-list-item-title
-          class="headline"
-          style="color:#777777; font-weight: bold; font-size:20px !important;"
-        >布谷</v-list-item-title>
-      </v-list-item-content>
-      <v-list-item-avatar color="grey">
-        <!-- <v-img :src="item.avatarUrl"></v-img> -->
+    <v-list-item style="left:12px;">
+      <v-list-item-avatar>
+        <v-img :src="getUserInfo.avatarUrl"></v-img>
       </v-list-item-avatar>
+      <v-list-item-content>
+        <v-list-item-title class="headline" style="color:#888c8e; font-size:18px !important;">布谷</v-list-item-title>
+      </v-list-item-content>
     </v-list-item>
-    <v-divider></v-divider>
-    <v-list-item>
+    <v-card-text>
       <div class="userInfo">
-        <div class="son">文章</div>
-        <div class="son">粉丝</div>
-        <div class="son">被赞</div>
-        <div class="son">收藏</div>
+        <div class="son">
+          <div>文章</div>
+          <div>{{getUserInfo.articleCount}}</div>
+        </div>
+        <div class="son">
+          <div>粉丝</div>
+          <div>{{getUserInfo.fansCount}}</div>
+        </div>
+        <div class="son">
+          <div>被赞</div>
+          <div>{{getUserInfo.likeCount}}</div>
+        </div>
+        <div class="son">
+          <div>收藏</div>
+          <div>{{getUserInfo.collectionCount}}</div> 
+        </div>
       </div>
-    </v-list-item>
+    </v-card-text>
+    <v-divider class="mx-2"></v-divider>
     <v-img src height="100"></v-img>
 
     <v-card-text>Visit ten places on our planet that are undergoing the biggest changes today.</v-card-text>
@@ -40,22 +49,24 @@
 <script>
 import axios from "axios";
 export default {
-  mounted() {
-    axios
-      .get("/article/find", {
-        params: { current: this.page, size: this.size, sort: this.sort }
-      })
-      .then(res => {
-        this.items = res.data.data.records;
-        this.pageCount = res.data.data.pages;
-        this.page = res.data.data.current;
-      });
+  props: {
+    getUserInfo: {}
   }
 };
 </script>
 
 <style scoped>
-.userInfo{
+.userInfo {
+  font-size: 14px;
+  width: 100%;
   display: flex;
+  justify-content: space-around;
+  color: #888c8e;
+}
+.son {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 </style>

@@ -4,12 +4,12 @@
       <v-row no-gutters style="flex-wrap: nowrap;">
         <v-col cols="3">
           <v-card class="pa-1 mb-6" outlined tile>
-            <UserInfo />
+            <UserInfo :getUserInfo="userInfo"/>
           </v-card>
         </v-col>
         <v-col cols="8">
           <v-card class="pa-1 ml-5" outlined tile>
-            <Article/>
+            <Article v-on:getData="getData"/>
           </v-card>
         </v-col>
         <v-col cols="1">
@@ -28,13 +28,24 @@ export default {
     Article
   },
 
+  data() {
+    return {
+      userInfo: {}
+    }
+  },
+
   validate({ params }) {
     // 必须是number类型
     return /^\d+$/.test(params.id);
   },
   mounted() {
-
-  }
+  },
+  methods: {
+    getData(data){
+      console.log(data)
+      this.userInfo = data.user
+    }
+  },
 };
 </script>
 <style scoped>

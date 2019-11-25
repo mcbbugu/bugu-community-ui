@@ -23,15 +23,21 @@ export default {
         table: true, // 表格
         navigation: true // 导航目录
       },
-      handbook: ""
+      handbook: "",
     };
   },
-  mounted() {
+  mounted(){
     let id = this.$route.params.id;
     axios.get("/article/find/" + id).then(res => {
-      console.log(res);
       this.handbook = res.data.data.content;
+      this.user = res.data.data.user;
+      this.getData(res.data.data)
     });
+  },
+  methods:{
+    getData(data){
+      this.$emit("getData", data);
+    }
   }
 };
 </script>

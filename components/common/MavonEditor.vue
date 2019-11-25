@@ -53,7 +53,6 @@ export default {
     // 绑定@imgAdd event
     $imgAdd(pos, $file) {
       // 第一步.将图片上传到服务器.
-      console.log("进入图片上传方法")
       var formdata = new FormData();
       formdata.append("img", $file);
       axios({
