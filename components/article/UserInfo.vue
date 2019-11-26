@@ -1,8 +1,8 @@
 <template>
-  <v-card max-width="344" class="mx-auto">
-    <v-list-item style="left:12px;">
+  <v-card fixed outlined max-width="344" class="mx-auto">
+    <v-list-item style="left:15px;">
       <v-list-item-avatar>
-        <v-img :src="getUserInfo.avatarUrl"></v-img>
+        <v-img size="5" :src="user.avatarUrl"></v-img>
       </v-list-item-avatar>
       <v-list-item-content>
         <v-list-item-title class="headline" style="color:#888c8e; font-size:18px !important;">布谷</v-list-item-title>
@@ -12,45 +12,54 @@
       <div class="userInfo">
         <div class="son">
           <div>文章</div>
-          <div>{{getUserInfo.articleCount}}</div>
+          <div>{{user.articleCount}}</div>
         </div>
         <div class="son">
           <div>粉丝</div>
-          <div>{{getUserInfo.fansCount}}</div>
+          <div>{{user.fansCount}}</div>
         </div>
         <div class="son">
           <div>被赞</div>
-          <div>{{getUserInfo.likeCount}}</div>
+          <div>{{user.likeCount}}</div>
         </div>
         <div class="son">
           <div>收藏</div>
-          <div>{{getUserInfo.collectionCount}}</div> 
+          <div>{{user.collectionCount}}</div>
         </div>
       </div>
     </v-card-text>
+    <!-- class="mx-8" -->
     <v-divider class="mx-2"></v-divider>
-    <v-img src height="100"></v-img>
+    <v-card-text>
+      <div class="userInfo">
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on }">
+            <div v-on="on">排行：{{user.rank}}</div>
+          </template>
+          <span>总访问量的排行</span>
+        </v-tooltip>
 
-    <v-card-text>Visit ten places on our planet that are undergoing the biggest changes today.</v-card-text>
-
-    <v-card-actions>
-      <v-btn text color="deep-purple accent-4">Read</v-btn>
-      <v-btn text color="deep-purple accent-4">Bookmark</v-btn>
-      <v-spacer></v-spacer>
-      <v-btn icon>
-        <v-icon>mdi-heart</v-icon>
-      </v-btn>
-      <v-btn icon>
-        <v-icon>mdi-share-variant</v-icon>
-      </v-btn>
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on }">
+            <div v-on="on">访问：{{user.viewCount}}</div>
+          </template>
+          <span>总访问量</span>
+        </v-tooltip>
+      </div>
+    </v-card-text>
+    <v-divider class="mx-2"></v-divider>
+    <v-card-actions style="display:flex; justify-content: center; ">
+      <v-btn text color="primary accent-4">
+        <v-icon left>mdi-eye-plus-outline</v-icon>关注</v-btn>
+      <v-btn text color="primary accent-4">
+        <v-icon left>mdi-email-outline</v-icon>私信</v-btn>
     </v-card-actions>
   </v-card>
 </template>
 <script>
-import axios from "axios";
 export default {
   props: {
-    getUserInfo: {}
+    user: {}
   }
 };
 </script>

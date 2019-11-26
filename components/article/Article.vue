@@ -1,6 +1,6 @@
 <template>
   <div class="mavonEditor">
-    <no-ssr>
+    <client-only>
       <mavon-editor style="z-index:0"
         :value="handbook"
         :editable="false"
@@ -9,12 +9,15 @@
         :defaultOpen="'preview'"
         :boxShadow="false"
       />
-    </no-ssr>
+    </client-only>
   </div>
 </template>
 <script>
 import axios from "axios";
 export default {
+  props: {
+    handbook: ""
+  },
   data() {
     return {
       markdownOption: {
@@ -23,21 +26,13 @@ export default {
         table: true, // 表格
         navigation: true // 导航目录
       },
-      handbook: "",
     };
   },
   mounted(){
-    let id = this.$route.params.id;
-    axios.get("/article/find/" + id).then(res => {
-      this.handbook = res.data.data.content;
-      this.user = res.data.data.user;
-      this.getData(res.data.data)
-    });
+    
   },
   methods:{
-    getData(data){
-      this.$emit("getData", data);
-    }
+    
   }
 };
 </script>

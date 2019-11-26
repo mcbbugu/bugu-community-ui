@@ -3,13 +3,11 @@
     <v-container class="lighten-5">
       <v-row no-gutters style="flex-wrap: nowrap;">
         <v-col cols="3">
-          <v-card class="pa-1 mb-6" outlined tile>
-            <UserInfo :getUserInfo="userInfo"/>
-          </v-card>
+          <UserInfo :user="user"/>
         </v-col>
         <v-col cols="8">
-          <v-card class="pa-1 ml-5" outlined tile>
-            <Article v-on:getData="getData"/>
+          <v-card class="pa-0 ml-5" outlined>
+            <Article :handbook="handbook"/>
           </v-card>
         </v-col>
         <v-col cols="1">
@@ -22,6 +20,7 @@
 <script>
 import UserInfo from "~/components/article/UserInfo.vue";
 import Article from "~/components/article/Article.vue";
+import axios from "axios";
 export default {
   components: {
     UserInfo,
@@ -30,7 +29,8 @@ export default {
 
   data() {
     return {
-      userInfo: {}
+      handbook: "",
+      user: {}
     }
   },
 
@@ -39,12 +39,14 @@ export default {
     return /^\d+$/.test(params.id);
   },
   mounted() {
+    let id = this.$route.params.id;
+    axios.get("/article/find/" + id).then(res => {
+      this.handbook = res.data.data.content;
+      this.user = res.data.data.user;
+    });
   },
   methods: {
-    getData(data){
-      console.log(data)
-      this.userInfo = data.user
-    }
+    
   },
 };
 </script>

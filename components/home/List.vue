@@ -41,8 +41,9 @@
         <v-list-item
           style="border-top:1px solid #f2f2f2; height:70px;"
           v-for="item in items"
-          :key="item.title"
-          @click="openArticle(item.id)">
+          :key="item.id"
+          @click="openArticle(item.id)"
+        >
           <v-list-item-avatar>
             <v-img :src="item.avatarUrl"></v-img>
           </v-list-item-avatar>
@@ -104,7 +105,12 @@ export default {
   mounted() {
     axios
       .get("/article/find", {
-        params: { current: this.page, size: this.size, sort: this.sort }
+        params: {
+          current: this.page,
+          size: this.size,
+          sort: this.sort,
+          classify: this.classify
+        }
       })
       .then(res => {
         this.items = res.data.data.records;
@@ -184,7 +190,7 @@ export default {
       this.sortName = index;
     },
 
-    openArticle(e){
+    openArticle(e) {
       this.$router.push("/article/" + e);
     }
   }
