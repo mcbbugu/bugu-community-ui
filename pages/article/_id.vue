@@ -3,10 +3,21 @@
     <v-container class="lighten-5">
       <v-row no-gutters style="flex-wrap: nowrap;">
         <v-col cols="3">
-          <UserInfo :user="user"/>
+          <UserInfo :user="user" v-on:getAllArticle_event="getAllArticle"/>
         </v-col>
         <v-col cols="8">
-          <v-card class="pa-0 ml-5" outlined>
+          <v-card class="pa-0 ml-1" outlined>
+            <div style="color:#636b6f; padding: 25px 0 0 25px; line-height:40px; font-size:30px;">
+              <div>{{data.title}}</div>
+              <div style="font-size:13px; color:#adb1af;">
+                <v-icon color="#adb1af" size="15">mdi-source-fork</v-icon>&nbsp;&nbsp;{{data.classify}}
+                &nbsp;/&nbsp;
+                <v-icon color="#adb1af" size="15">mdi-eye-outline</v-icon>&nbsp;&nbsp;{{data.viewCount}}
+                &nbsp;/&nbsp;
+                <v-icon color="#adb1af" size="15">mdi-clock-outline</v-icon>&nbsp;&nbsp;{{data.gmtCreate}}
+                &nbsp;/&nbsp; 更新于3天前
+              </div>
+            </div>
             <Article :handbook="handbook"/>
           </v-card>
         </v-col>
@@ -30,7 +41,8 @@ export default {
   data() {
     return {
       handbook: "",
-      user: {}
+      user: {},
+      data: {}
     }
   },
 
@@ -43,10 +55,15 @@ export default {
     axios.get("/article/find/" + id).then(res => {
       this.handbook = res.data.data.content;
       this.user = res.data.data.user;
+      this.data = res.data.data;
     });
   },
   methods: {
-    
+    getAllArticle(){
+      axios.get().then(res => {
+        
+      })
+    }
   },
 };
 </script>
