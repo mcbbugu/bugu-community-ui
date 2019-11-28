@@ -74,7 +74,6 @@ export default {
   },
   methods: {
     getAllArticle(){
-      console.log("ddd")
       this.$emit('getAllArticle_event')
     }
   },

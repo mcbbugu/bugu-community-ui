@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card max-width="1000" class="mx-auto">
+    <v-card outlined max-width="100%">
       <v-col cols="12" sm="6" class="py-1">
         <!-- v-model="text" -->
         <v-btn-toggle tile color="#777777" group>
@@ -10,7 +10,7 @@
           <v-btn max-height="26" @click="getClassify('健身')">健身</v-btn>
           <v-btn max-height="26" @click="getClassify('内在工程')">内在工程</v-btn>
           <!-- 下拉排序列表 -->
-          <div style="margin-left:400px;">
+          <div v-if="userId == undefined" style="padding-left:400px;">
             <v-menu open-on-hover offset-y>
               <template v-slot:activator="{ on }">
                 <v-btn-toggle tile color="#777777" group>
@@ -44,10 +44,10 @@
           :key="item.id"
           @click="openArticle(item.id)"
         >
-          <v-list-item-avatar>
+          <v-list-item-avatar v-if="userId == undefined">
             <v-img :src="item.avatarUrl"></v-img>
           </v-list-item-avatar>
-          <v-chip label small style="margin-right:10  px; right:13px;">{{item.classify}}</v-chip>
+          <v-chip v-if="userId == undefined" label small style="margin-right:10px; right:13px;">{{item.classify}}</v-chip>
           <v-list-item-content>
             <v-list-item-title style="color:#636b6f" v-text="item.title"></v-list-item-title>
           </v-list-item-content>
@@ -71,7 +71,7 @@
           <v-row justify="center">
             <v-col cols="8">
               <v-container class="max-width">
-                <v-pagination v-model="page" @input="next" class="my-1" :length="pageCount"></v-pagination>
+                <v-pagination v-model="current" @input="next" class="my-1" :length="pageCount"></v-pagination>
               </v-container>
             </v-col>
           </v-row>
@@ -85,10 +85,17 @@
 <script>
 import axios from "axios";
 export default {
+  props: {
+    userId: {
+      value: "",
+      required: false
+    }
+  },
+
   data: () => ({
     items: [],
     tagColor: "",
-    page: 1,
+    current: 1,
     pageCount: 0,
     size: 10,
     dropDownList: [
@@ -99,23 +106,38 @@ export default {
     ],
     sort: "gmt_create",
     sortName: "排序方式",
-    classify: ""
+    classify: "",
+    articleId: 0
   }),
 
   mounted() {
+    this.articleId = this.$route.params.id;
+    let data = {}
+    if (this.userId == undefined) {
+      data = {
+        current: this.current,
+        size: this.size,
+        sort: this.sort,
+        classify: this.classify
+      }
+    } else {
+      data = {
+        userId: this.userId,
+        current: this.current,
+        size: this.size,
+        sort: this.sort,
+        classify: this.classify
+      }
+    }
+
     axios
       .get("/article/find", {
-        params: {
-          current: this.page,
-          size: this.size,
-          sort: this.sort,
-          classify: this.classify
-        }
+        params: data
       })
       .then(res => {
         this.items = res.data.data.records;
         this.pageCount = res.data.data.pages;
-        this.page = res.data.data.current;
+        this.current = res.data.data.current;
       });
   },
 
@@ -123,11 +145,11 @@ export default {
     //分类
     getClassify(classify) {
       this.classify = classify;
-      this.page = 1;
+      this.current = 1;
       axios
         .get("/article/find", {
           params: {
-            current: this.page,
+            current: this.current,
             size: this.size,
             classify: this.classify,
             sort: this.sort
@@ -141,11 +163,11 @@ export default {
 
     //分页
     next(e) {
-      this.page = e;
+      this.current = e;
       axios
         .get("/article/find", {
           params: {
-            current: this.page,
+            current: this.current,
             size: this.size,
             classify: this.classify,
             sort: this.sort
@@ -159,7 +181,7 @@ export default {
 
     //下拉框
     dropDown(index) {
-      this.page = 1;
+      this.current = 1;
       switch (index) {
         case 0:
           this.sort = "agree_count";
@@ -177,7 +199,7 @@ export default {
       axios
         .get("/article/find", {
           params: {
-            current: this.page,
+            current: this.current,
             size: this.size,
             classify: this.classify,
             sort: this.sort
@@ -191,7 +213,11 @@ export default {
     },
 
     openArticle(e) {
-      this.$router.push("/article/" + e);
+      if (e == this.articleId) {
+        this.$router.go(0);
+      } else {
+        this.$router.push("/article/" + e);
+      }
     }
   }
 };
