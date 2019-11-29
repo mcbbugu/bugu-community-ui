@@ -1,6 +1,6 @@
 <template>
   <div class="mavonEditor">
-    <no-ssr>
+    <client-only>
       <mavon-editor style="z-index:10"
         ref=md
         :toolbars="markdownOption"
@@ -12,12 +12,16 @@
         @imgAdd="$imgAdd"
         :boxShadow=false
       />
-    </no-ssr>
+    </client-only>
   </div>
 </template>
 <script>
 import axios from 'axios'
 export default {
+  props:{
+    content: ""
+  },
+
   data() {
     return {
       markdownOption: {
@@ -45,6 +49,12 @@ export default {
       handbook: ""
     };
   },
+
+  mounted() {
+    console.log(this.content)
+    this.handbook = this.content;
+  },
+
   methods: {
     change_mavon(value, render) {
       this.$emit("change_mavon", value, render);

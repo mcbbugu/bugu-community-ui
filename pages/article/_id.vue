@@ -35,13 +35,13 @@
                 &nbsp;&nbsp;{{data.classify}}
                 &nbsp;/&nbsp;
                 <v-icon color="#adb1af" size="15">mdi-eye-outline</v-icon>
-                &nbsp;&nbsp;{{data.viewCount}}
+                &nbsp;{{data.viewCount}}
                 &nbsp;/&nbsp;
                 <v-icon color="#adb1af" size="15">mdi-clock-outline</v-icon>
-                &nbsp;&nbsp;{{data.gmtCreate | getTimeFormat}}
+                &nbsp;{{data.gmtCreate | getTimeFormat}}
                 &nbsp;/&nbsp; 更新于 {{data.gmtUpdate | getTimeFormat}}
                 &nbsp;·&nbsp;<nuxt-link :to="'/article/' + id +'/edit'" style="text-decoration: none;">编辑</nuxt-link>
-                &nbsp;&nbsp;<nuxt-link :to="{path: '/article/' + id + '/edit'}" style="text-decoration: none;">删除</nuxt-link>
+                &nbsp;·&nbsp;<nuxt-link :to="{path: '/article/' + id + '/edit'}" style="text-decoration: none;">删除</nuxt-link>
               </div>
             </div>
             <Article :handbook="handbook" />

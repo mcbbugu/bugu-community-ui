@@ -4,8 +4,7 @@
     <v-row justify="end">
       <v-col cols="12" sm="6" md="9">
         <v-card class="pa-2" outlined>
-          <h3 style="text-align:center; margin:40px; font-size:1.2em; color:#636b6f;">
-            写篇博客</h3>
+          <h3 style="text-align:center; margin:40px; font-size:1.2em; color:#636b6f;">写篇博客</h3>
           <v-text-field
             @input="titleEdit"
             style="margin:0 auto; width:90%;"
@@ -35,10 +34,17 @@
             dense
             deletable-chips
           ></v-select>
-          <MavonEditor v-on:change_mavon="change_text" />
+          <MavonEditor v-if="content != ''" v-on:change_mavon="change_text" :content="content" />
+          <MavonEditor v-if="Object.keys(editData).length == 0" v-on:change_mavon="change_text"/>
           <!-- 消息条 -->
           <div>
-            <v-snackbar style="z-index:10000" v-model="snackbar" :timeout="1500" color="#ff5252" top>
+            <v-snackbar
+              style="z-index:10000"
+              v-model="snackbar"
+              :timeout="1500"
+              color="#ff5252"
+              top
+            >
               {{text}}
               <v-btn color="#fff" text @click="snackbar=false">
                 <v-icon size="18">mdi-window-close</v-icon>
@@ -77,7 +83,12 @@ export default {
   components: {
     MavonEditor
   },
+  props: {
+    editData: {}
+  },
+
   data: () => ({
+    value: [],
     items: [],
     value: [],
     title: "",
@@ -93,10 +104,19 @@ export default {
     ],
     text: "",
     snackbar: false,
-    isActive: false,
+    isActive: false
   }),
 
   mounted() {
+    let data = this.editData;
+    if (Object.keys(data).length != 0) {
+      this.title = data.title;
+      this.content = data.content;
+      let tagsArr = data.tags.split(",");
+      console.log(tagsArr);
+      this.value = tagsArr;
+    }
+
     axios.get("/tag/find").then(res => {
       let tags = res.data.data;
       tags.forEach(tag => {
@@ -119,10 +139,10 @@ export default {
       this.tags = e;
     },
     select_focus() {
-      this.isActive = true
+      this.isActive = true;
     },
-    select_blur(){
-      this.isActive = false
+    select_blur() {
+      this.isActive = false;
     },
     //发布
     release() {
@@ -154,7 +174,7 @@ export default {
           }
         })
         .then(res => {
-          if(res.data.code == 1){
+          if (res.data.code == 1) {
             this.$router.push("/article/" + res.data.data);
           }
         });
@@ -163,8 +183,8 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-  //标签选择界面浮于最上方
-  .up{
-    z-index: 11;
-  }
+//标签选择界面浮于最上方
+.up {
+  z-index: 11;
+}
 </style>

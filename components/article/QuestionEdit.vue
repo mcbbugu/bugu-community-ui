@@ -35,7 +35,8 @@
             dense
             deletable-chips
           ></v-select>
-          <MavonEditor v-on:change_mavon="change_text" />
+          <MavonEditor v-if="content != ''" v-on:change_mavon="change_text" :content="content" />
+          <MavonEditor v-if="Object.keys(editData).length == 0" v-on:change_mavon="change_text"/>
           <!-- 消息条 -->
           <div>
             <v-snackbar style="z-index:10000" v-model="snackbar" :timeout="1500" color="#ff5252" top>
@@ -74,6 +75,11 @@ export default {
   components: {
     MavonEditor
   },
+
+  props: {
+    editData: {}
+  },
+
   data: () => ({
     items: [],
     value: [],
@@ -95,6 +101,15 @@ export default {
   }),
 
   mounted() {
+    let data = this.editData;
+    if (Object.keys(data).length != 0) {
+      this.title = data.title;
+      this.content = data.content;
+      let tagsArr = data.tags.split(",");
+      console.log(tagsArr);
+      this.value = tagsArr;
+    }
+    
     axios.get("/tag/find").then(res => {
       let tags = res.data.data;
       tags.forEach(tag => {
