@@ -152,10 +152,11 @@ export default {
     },
     dropDown(e){
       if(e == "写篇博客"){
-        this.$router.push("/article/blog");
+        var classify = "blog"
       }else if(e == "提个问题"){
-        this.$router.push("/article/question");
+        var classify = "question"
       }
+      this.$router.push("/article/create/" + classify);
     }
   }
 };

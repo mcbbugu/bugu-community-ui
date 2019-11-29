@@ -6,7 +6,7 @@
           <v-img size="6" :src="user.avatarUrl"></v-img>
         </v-list-item-avatar>
         <v-list-item-content style="padding-right:5px;">
-          <v-list-item-title class="headline" style="color:#777777; font-size:15px !important;">布谷</v-list-item-title>
+          <v-list-item-title class="headline" style="color:#636b6f; font-size:15px !important;">布谷</v-list-item-title>
         </v-list-item-content>
       </v-list-item>
       <v-card-text>
@@ -20,7 +20,7 @@
             <div>{{user.fansCount}}</div>
           </div>
           <div class="son">
-            <div>被赞</div>
+            <div>点赞</div>
             <div>{{user.likeCount}}</div>
           </div>
           <div class="son">

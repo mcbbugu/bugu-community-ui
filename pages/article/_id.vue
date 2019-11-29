@@ -1,33 +1,56 @@
 <template>
   <v-content>
+    <!-- tile 方的卡片边框 -->
     <v-container class="lighten-5">
       <v-row no-gutters style="flex-wrap: nowrap;">
-        <v-col cols="1">
-          <!-- tile 方的 -->
-          <v-card class="pt-2 mr-5 mt-10" outlined>
-
-          </v-card>
+        <!-- 右边图标操作 -->
+        <v-col cols="1" style="margin-top:100px;">
+          <div class="text-center">
+            <div>
+              <v-btn color fab x-small depressed>
+                <v-icon color="#636b6f">mdi-thumb-up-outline</v-icon>
+              </v-btn>
+              <p style="color:#636b6f">122</p>
+            </div>
+            <div>
+              <v-btn color fab x-small depressed>
+                <v-icon color="#636b6f">mdi-comment-outline</v-icon>
+              </v-btn>
+              <p style="color:#636b6f">123</p>
+            </div>
+            <div>
+              <v-btn color fab x-small depressed>
+                <v-icon color="#636b6f">mdi-star</v-icon>
+              </v-btn>
+            </div>
+          </div>
         </v-col>
+        <!-- 右边图标操作 end -->
         <v-col cols="8">
           <v-card v-if="!isAllArticle" class="pa-0" outlined>
             <div style="color:#636b6f; padding: 25px 0 0 25px; line-height:40px; font-size:30px;">
               <div>{{data.title}}</div>
               <div style="font-size:13px; color:#adb1af;">
-                <v-icon color="#adb1af" size="15">mdi-source-fork</v-icon>&nbsp;&nbsp;{{data.classify}}
+                <v-icon color="#adb1af" size="15">mdi-source-fork</v-icon>
+                &nbsp;&nbsp;{{data.classify}}
                 &nbsp;/&nbsp;
-                <v-icon color="#adb1af" size="15">mdi-eye-outline</v-icon>&nbsp;&nbsp;{{data.viewCount}}
+                <v-icon color="#adb1af" size="15">mdi-eye-outline</v-icon>
+                &nbsp;&nbsp;{{data.viewCount}}
                 &nbsp;/&nbsp;
-                <v-icon color="#adb1af" size="15">mdi-clock-outline</v-icon>&nbsp;&nbsp;{{data.gmtCreate}}
-                &nbsp;/&nbsp; 更新于3天前
+                <v-icon color="#adb1af" size="15">mdi-clock-outline</v-icon>
+                &nbsp;&nbsp;{{data.gmtCreate | getTimeFormat}}
+                &nbsp;/&nbsp; 更新于 {{data.gmtUpdate | getTimeFormat}}
+                &nbsp;·&nbsp;<nuxt-link :to="'/article/' + id +'/edit'" style="text-decoration: none;">编辑</nuxt-link>
+                &nbsp;&nbsp;<nuxt-link :to="{path: '/article/' + id + '/edit'}" style="text-decoration: none;">删除</nuxt-link>
               </div>
             </div>
-            <Article :handbook="handbook"/>
+            <Article :handbook="handbook" />
           </v-card>
           <!-- 用户所有文章 -->
           <List :userId="user.id" v-if="isAllArticle"/>
         </v-col>
         <v-col cols="3">
-          <UserInfo :user="user" v-on:getAllArticle_event="getAllArticle"/>
+          <UserInfo :user="user" v-on:getAllArticle_event="getAllArticle" />
         </v-col>
       </v-row>
     </v-container>
@@ -50,8 +73,9 @@ export default {
       handbook: "",
       user: {},
       data: {},
-      isAllArticle: false
-    }
+      isAllArticle: false,
+      id: 0
+    };
   },
 
   validate({ params }) {
@@ -60,6 +84,7 @@ export default {
   },
   mounted() {
     let id = this.$route.params.id;
+    this.id = id;
     axios.get("/article/find/" + id).then(res => {
       this.handbook = res.data.data.content;
       this.user = res.data.data.user;
@@ -67,20 +92,15 @@ export default {
     });
   },
   methods: {
-    getAllArticle(){
-      this.isAllArticle = true
-      // axios.get("/article/find/user/all", {
-      //   params: {
-      //     userId: this.user.id,
-      //     current: this.current,
-      //     size: this.size
-      //   }
-      // }).then(res => {
-        
-      //   // this.$router.push("/article/" + res.data.data.title);
-      // })
+    getAllArticle() {
+      this.isAllArticle = true;
     }
   },
+
+  edit(){
+    let id = this.$route.params.edit;
+    console.log(edit);
+  }
 };
 </script>
 <style scoped>

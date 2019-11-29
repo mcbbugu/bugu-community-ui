@@ -15,7 +15,7 @@
               <template v-slot:activator="{ on }">
                 <v-btn-toggle tile color="#777777" group>
                   <v-btn max-height="26" style="padding: 0 1px;" v-on="on">
-                    <v-icon size="15">mdi-format-list-bulleted-square</v-icon>
+                    <v-icon size="14">mdi-unfold-more-horizontal</v-icon>
                     &nbsp;{{sortName}}
                   </v-btn>
                 </v-btn-toggle>
