@@ -32,15 +32,16 @@ export function getTimeFormat(valueTime) {
             // var time = newData - diffTime;
             let dayNum = Math.floor(diffTime / (60 * 60 * 1000));
             return dayNum + " 小时前";
-        } else if (diffTime < 3600 * 1000 && diffTime > 0) {
+        } else if (diffTime < 3600 * 1000 && diffTime > 60 * 1000) {
             // //注释("一小时之内");
             // var time = newData - diffTime;
             let dayNum = Math.floor(diffTime / (60 * 1000));
-            if(dayNum < 1){
-                dayNum = Math.floor(diffTime / 1000);
-                return dayNum + " 秒前";
-            }
             return dayNum + " 分钟前";
+        }else if(diffTime < 1000 * 60 && diffTime > 1000){
+            let dayNum = Math.floor(diffTime / 1000);
+            return dayNum + " 秒前";
+        }else{
+            return "刚才";
         }
     }
 }

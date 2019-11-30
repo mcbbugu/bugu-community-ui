@@ -37,7 +37,9 @@
               @click="dropDown(item.title)"
             >
               <v-list-item-title style="font-size:0.8em; color:#777777;">
-                <v-icon style="padding-bottom:3.8px;" size="17" v-text="item.icon"></v-icon> {{item.title}}</v-list-item-title>
+                <v-icon style="padding-bottom:3.8px;" size="17" v-text="item.icon"></v-icon>
+                {{item.title}}
+              </v-list-item-title>
             </v-list-item>
           </v-list>
         </v-menu>
@@ -51,11 +53,11 @@
     </v-toolbar-items>
 
     <!-- 头像 -->
-    <v-avatar v-if="isLogin" size="35">
-      <img v-bind:src="user.avatarUrl" alt />
+    <v-avatar size="35" v-if="JSON.stringify(user)!='{}'">
+      <img v-bind:src="user.avatarUrl"/>
     </v-avatar>
     <!-- 登录按钮 -->
-    <div class="text-center" v-if="!isLogin">
+    <div class="text-center" v-if="JSON.stringify(user)=='{}'">
       <v-dialog v-model="dialog" width="400">
         <template v-slot:activator="{ on }">
           <v-btn class="ma-2" color="#777777" text icon v-on="on">
@@ -99,21 +101,20 @@ import axios from "axios";
 import qs from "qs";
 import global from "../global";
 export default {
-  data: () => ({
-    dialog: false,
-    valid: true,
-    user: {},
-    isLogin: false,
-    snackbar: false,
-    text: "登录成功！",
-    dropDownList: [
-      { title: "写篇博客", icon: "mdi-circle-edit-outline"},
-      { title: "提个问题", icon: "mdi-comment-question-outline"},
-      { title: "学习笔记", icon: "mdi-note-outline"}
-    ]
-  }),
-
-  created() {},
+  data() {
+    return {
+      dialog: false,
+      valid: true,
+      user: {},
+      snackbar: false,
+      text: "登录成功！",
+      dropDownList: [
+        { title: "写篇博客", icon: "mdi-circle-edit-outline" },
+        { title: "提个问题", icon: "mdi-comment-question-outline" },
+        { title: "学习笔记", icon: "mdi-note-outline" }
+      ]
+    };
+  },
 
   mounted() {
     axios.defaults.baseURL = global.apiUrl;
@@ -125,11 +126,11 @@ export default {
       axios
         .get("/user/find", { params: { token } })
         .then(res => {
-          this.$router.push("/");
-          this.user = res.data.data;
-          this.isLogin = true;
-          this.snackbar = true;
-          console.log(this.user);
+          if (res.data.code == 1) {
+            this.$router.push("/");
+            this.user = res.data.data;
+            this.snackbar = true;
+          }
         })
         .catch(error => {
           this.snackbar = true;
@@ -138,8 +139,9 @@ export default {
     } else {
       //刷新时调用该接口，若 cookie 中已有 token，则直接获取数据
       axios.get("/user/refresh").then(res => {
-        this.user = res.data.data;
-        this.isLogin = true;
+        if (res.data.code == 1) {
+          this.user = res.data.data;
+        }
       });
     }
   },
@@ -150,11 +152,11 @@ export default {
       window.location.href = global.apiUrl + "/oauth/login/gitee";
       // window.location.href = "http://192.168.0.102:3000"
     },
-    dropDown(e){
-      if(e == "写篇博客"){
-        var classify = "blog"
-      }else if(e == "提个问题"){
-        var classify = "question"
+    dropDown(e) {
+      if (e == "写篇博客") {
+        var classify = "blog";
+      } else if (e == "提个问题") {
+        var classify = "question";
       }
       this.$router.push("/article/create/" + classify);
     }

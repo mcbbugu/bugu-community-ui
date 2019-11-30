@@ -20,7 +20,6 @@
           <v-select
             v-bind:class="{up: isActive}"
             @focus="select_focus"
-            @change="select"
             @blur="select_blur"
             style="margin:10px auto; width:90%;"
             :rules="tagRules"
@@ -34,8 +33,15 @@
             dense
             deletable-chips
           ></v-select>
-          <MavonEditor v-if="content != ''" v-on:change_mavon="change_text" :content="content" />
-          <MavonEditor v-if="Object.keys(editData).length == 0" v-on:change_mavon="change_text"/>
+          <MavonEditor
+            v-if="content != '' && Object.keys(editData).length != 0"
+            v-on:change_mavon="change_text"
+            :content="content"
+          />
+          <MavonEditor
+            v-else-if="Object.keys(editData).length == 0"
+            v-on:change_mavon="change_text"
+          />
           <!-- 消息条 -->
           <div>
             <v-snackbar
@@ -90,7 +96,6 @@ export default {
   data: () => ({
     value: [],
     items: [],
-    value: [],
     title: "",
     tags: [],
     content: "",
@@ -113,7 +118,6 @@ export default {
       this.title = data.title;
       this.content = data.content;
       let tagsArr = data.tags.split(",");
-      console.log(tagsArr);
       this.value = tagsArr;
     }
 
@@ -127,7 +131,6 @@ export default {
   methods: {
     change_text(value, render) {
       // console.log("this is value: " + render);
-      console.log("this is value: " + value);
       this.content = value;
     },
 
@@ -135,9 +138,9 @@ export default {
       this.title = e;
     },
 
-    select(e) {
-      this.tags = e;
-    },
+    // select(e) {
+    //   this.tags = e;
+    // },
     select_focus() {
       this.isActive = true;
     },
@@ -154,30 +157,51 @@ export default {
         this.snackbar = true;
         this.text = "请填写标题";
       }
-      if (this.tags.length == 0) {
+      if (this.value.length == 0) {
         this.snackbar = true;
         this.text = "请选择标签";
       }
-      let data = {
-        title: this.title,
-        tags: this.value,
-        content: this.content,
-        classify: "博客"
-      };
-      // if(this.title.length > 0 && this.title.length < 30 &&
-      // this.value > 0 &&)
-      data = qs.stringify(data);
-      axios
-        .post("/article/add", data, {
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
-          }
-        })
-        .then(res => {
-          if (res.data.code == 1) {
-            this.$router.push("/article/" + res.data.data);
-          }
-        });
+
+      if (Object.keys(this.editData).length == 0) {
+        var data = {
+          title: this.title,
+          tags: this.value,
+          content: this.content,
+          classify: "博客"
+        };
+        data = qs.stringify(data);
+        axios
+          .post("/article/add", data, {
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded"
+            }
+          })
+          .then(res => {
+            if (res.data.code == 1) {
+              this.$router.push("/article/" + res.data.data);
+            }
+          });
+      } else {
+        var data = {
+          id: this.editData.id,
+          title: this.title,
+          tags: this.value,
+          content: this.content,
+          classify: "博客"
+        };
+        data = qs.stringify(data);
+        axios
+          .post("/article/update", data, {
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded"
+            }
+          })
+          .then(res => {
+            if (res.data.code == 1) {
+              this.$router.push("/article/" + this.editData.id);
+            }
+          });
+      }
     }
   }
 };
