@@ -27,7 +27,7 @@
         </v-col>
         <!-- 右边图标操作 end -->
         <!-- 消息条 -->
-          <!-- <div>
+        <!-- <div>
             <v-snackbar
               style="z-index:10000"
               v-model="snackbar"
@@ -40,8 +40,8 @@
                 <v-icon size="18">mdi-window-close</v-icon>
               </v-btn>
             </v-snackbar>
-          </div> -->
-          <!-- 消息条 end -->
+        </div>-->
+        <!-- 消息条 end -->
         <v-col cols="8">
           <v-card v-if="!isAllArticle" class="pa-0" outlined>
             <div style="color:#636b6f; padding: 25px 0 0 25px; line-height:40px; font-size:30px;">
@@ -55,12 +55,17 @@
                 &nbsp;/&nbsp;
                 <v-icon color="#adb1af" size="15">mdi-clock-outline</v-icon>
                 &nbsp;
-                 {{data.gmtCreate | getTimeFormat}}
+                {{data.gmtCreate | getTimeFormat}}
                 &nbsp;/&nbsp; 更新于
                 {{data.gmtUpdate | getTimeFormat}}
                 &nbsp;·&nbsp;
-                <nuxt-link v-if="oneself" :to="'/article/' + id +'/edit'" style="text-decoration: none;">编辑</nuxt-link>&nbsp;&nbsp;
-                <nuxt-link v-if="oneself"
+                <nuxt-link
+                  v-if="oneself"
+                  :to="'/article/' + id +'/edit'"
+                  style="text-decoration: none;"
+                >编辑</nuxt-link>&nbsp;&nbsp;
+                <nuxt-link
+                  v-if="oneself"
                   :to="{path: '/article/' + id + '/edit'}"
                   style="text-decoration: none;"
                 >删除</nuxt-link>
@@ -68,8 +73,33 @@
             </div>
             <Article :handbook="handbook" />
           </v-card>
+          <v-card class="mt-10 mb-10 pt-5" outlined>
+            <div class="comment">
+              <div>
+                <v-avatar>
+                  <img v-if="JSON.stringify(accessUser)!='{}'" v-bind:src="accessUser.avatarUrl" />
+                </v-avatar>
+              </div>
+              <div style="min-width:550px; margin: 0 10px;">
+                <!-- :rules="titleRules" -->
+                <v-text-field
+                  @input="commentEdit"
+                  label="输入评论..."
+                  outlined
+                  dense
+                  required
+                  :counter="500"
+                  v-model="commentContent"
+                ></v-text-field>
+              </div>
+              <div>
+                <v-btn v-if="commmentDisabled" depressed color="primary">发送</v-btn>
+                <v-btn v-if="!commmentDisabled" disabled depressed color="primary">发送</v-btn>
+              </div>
+            </div>
+          </v-card>
           <!-- 用户所有文章 -->
-          <List :userId="user.id" v-if="isAllArticle"/>
+          <List :userId="user.id" v-if="isAllArticle" />
         </v-col>
         <v-col cols="3">
           <UserInfo :user="user" v-on:getAllArticle_event="getAllArticle" />
@@ -99,6 +129,10 @@ export default {
       id: 0,
       oneself: false,
       snackbar: false,
+      token: "",
+      accessUser: {},
+      commentContent: "",
+      commmentDisabled: false
     };
   },
 
@@ -118,9 +152,17 @@ export default {
       for (let i = 0; i < cookie.length; i++) {
         let c = cookie[i].trim();
         let token = this.user.token;
-        if(c.substring(0, c.lastIndexOf('=')) == "bgcommunity-token"){
-          let cookie = c.substring(c.lastIndexOf('=')+1, c.length);
-          this.oneself = true;
+        if (c.substring(0, c.lastIndexOf("=")) == "bgcommunity-token") {
+          let cookie = c.substring(c.lastIndexOf("=") + 1, c.length);
+          if (token == cookie) {
+            this.oneself = true;
+          }
+          //刷新时调用该接口，若 cookie 中已有 token，则直接获取数据
+          axios.get("/user/refresh").then(res => {
+            if (res.data.code == 1) {
+              this.accessUser = res.data.data;
+            }
+          });
         }
       }
     });
@@ -129,14 +171,27 @@ export default {
   methods: {
     getAllArticle() {
       this.isAllArticle = true;
+    },
+    edit() {
+      let id = this.$route.params.edit;
+      console.log(edit);
+    },
+    //输入评论
+    commentEdit(e) {
+      if(e != ""){
+        this.commmentDisabled = true
+      }else{
+        this.commmentDisabled = false
+      }
     }
-  },
-
-  edit() {
-    let id = this.$route.params.edit;
-    console.log(edit);
   }
 };
 </script>
 <style scoped>
+.comment {
+  display: flex;
+  max-width: 100%;
+  /* align-items: flex-end; */
+  justify-content: center;
+}
 </style>

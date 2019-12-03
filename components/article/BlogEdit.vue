@@ -93,24 +93,26 @@ export default {
     editData: {}
   },
 
-  data: () => ({
-    value: [],
-    items: [],
-    title: "",
-    tags: [],
-    content: "",
-    titleRules: [
-      v => !!v || "请输入标题",
-      v => v.length <= 50 || "标题不能超过30个字"
-    ],
-    tagRules: [
-      v => v.length >= 1 || "请选择标签",
-      v => v.length <= 3 || "不能超过3个标签"
-    ],
-    text: "",
-    snackbar: false,
-    isActive: false
-  }),
+  data() {
+    return {
+      value: [],
+      items: [],
+      title: "",
+      tags: [],
+      content: "",
+      titleRules: [
+        v => !!v || "请输入标题",
+        v => v.length <= 50 || "标题不能超过30个字"
+      ],
+      tagRules: [
+        v => v.length >= 1 || "请选择标签",
+        v => v.length <= 3 || "不能超过3个标签"
+      ],
+      text: "",
+      snackbar: false,
+      isActive: false
+    };
+  },
 
   mounted() {
     let data = this.editData;
