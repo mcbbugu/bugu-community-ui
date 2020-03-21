@@ -1,6 +1,6 @@
 <script>
-const apiUrl='http://192.168.0.102:8081';
-const baseUrl = "http://192.168.0.102:3000";
+const apiUrl='http://192.168.0.100:8081';
+const baseUrl = "http://192.168.0.100:3000";
   export default
   {
     apiUrl, //后端接口

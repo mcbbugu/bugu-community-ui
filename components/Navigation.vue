@@ -150,7 +150,7 @@ export default {
     login() {
       console.log("进入了登录方法");
       window.location.href = global.apiUrl + "/oauth/login/gitee";
-      // window.location.href = "http://192.168.0.102:3000"
+      // window.location.href = "http://192.168.43.121:3000"
     },
     dropDown(e) {
       if (e == "写篇博客") {
